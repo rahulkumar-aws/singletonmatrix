@@ -1,0 +1,12 @@
+services:
+  blog:
+    build:
+      context: .              # Use the current directory for the Dockerfile
+      dockerfile: Dockerfile  # Specify the Dockerfile
+    volumes:
+      - ./:/usr/src/app       # Mount the local project directory to the container
+    ports:
+      - "3000:3000"           # Map container's port 3000 to localhost:3000
+    environment:
+      NODE_ENV: development   # Set environment variable for development
+    command: yarn start       # Run the development server
