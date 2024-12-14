@@ -1,20 +1,20 @@
 # Use Node.js 18 as the base image
 FROM node:18
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy the dependency file first to leverage Docker caching
+# Copy only package.json for installing dependencies first (leverages Docker cache)
 COPY package.json ./
 
-# Install dependencies (generates yarn.lock if missing)
+# Install dependencies
 RUN yarn install
 
-# Copy the rest of the application code into the container
+# Copy the rest of the application into the container
 COPY . .
 
-# Expose the port for the development server
+# Expose the development server port
 EXPOSE 3000
 
-# Default command to start the development server
-CMD ["yarn", "start"]
+# Default command for the container (can be overridden by docker-compose.yml)
+CMD ["yarn", "start", "--host", "0.0.0.0"]

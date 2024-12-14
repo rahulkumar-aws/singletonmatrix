@@ -1,12 +1,13 @@
+version: "3.9"
 services:
   blog:
     build:
-      context: .              # Use the current directory for the Dockerfile
-      dockerfile: Dockerfile  # Specify the Dockerfile
+      context: .              # Build from the current directory
     volumes:
-      - ./:/usr/src/app       # Mount the local project directory to the container
+      - .:/usr/src/app        # Mount project directory
+      - /usr/src/app/node_modules # Exclude node_modules from being overwritten
     ports:
-      - "3000:3000"           # Map container's port 3000 to localhost:3000
+      - "3000:3000"           # Map port 3000 to localhost
     environment:
-      NODE_ENV: development   # Set environment variable for development
-    command: yarn start       # Run the development server
+      NODE_ENV: development   # Set environment for development
+    command: yarn start --host 0.0.0.0
