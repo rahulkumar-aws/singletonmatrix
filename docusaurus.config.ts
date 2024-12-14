@@ -11,8 +11,8 @@ const config: Config = {
   url: 'https://singletonmatrix.com', // Custom domain
   // Set the base URL where your site is served
   // '/' for custom domain, '/singletonmatrix/' for GitHub Pages default URL
-  baseUrl: process.env.USE_CUSTOM_DOMAIN === 'true' ? '/' : '/singletonmatrix/',
-
+  //baseUrl: process.env.USE_CUSTOM_DOMAIN === 'true' ? '/' : '/singletonmatrix/',
+  baseUrl : '/',
   // GitHub Pages deployment config
   organizationName: 'rahulkumar-aws', // Your GitHub username
   projectName: 'singletonmatrix', // Your GitHub repository name
