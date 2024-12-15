@@ -3,35 +3,38 @@ name: Deploy Docusaurus to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main # Run workflow on push to main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository
+    # Step 1: Checkout the main branch
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 2: Set up Node.js
+    # Step 2: Set up Node.js environment
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: 18
 
-    # Step 3: Install dependencies and build the site
+    # Step 3: Install dependencies and build the static site
     - name: Install dependencies and build
       run: |
         yarn install
         yarn build
-        echo 'singletonmatrix.com' > ./build/CNAME
 
-    # Step 4: Deploy to the gh-pages branch
+    # Step 4: Generate CNAME file for custom domain
+    - name: Add custom domain
+      run: echo 'singletonmatrix.com' > ./build/CNAME
+
+    # Step 5: Deploy the build output to gh-pages branch
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages # Ensure deployment to gh-pages branch
-        publish_dir: ./build
-        force_orphan: true # Optional: Use a clean gh-pages branch to avoid leftover files
+        github_token: ${{ secrets.GITHUB_TOKEN }} # Auto-generated token for GitHub Actions
+        publish_branch: gh-pages # Branch where the site is deployed
+        publish_dir: ./build # Directory containing the build output
+        force_orphan: true # Overwrite the gh-pages branch to ensure it's clean
