@@ -6,7 +6,7 @@ const config: Config = {
   title: 'Singleton Matrix',
   tagline: 'Explore, Learn, Innovate',
   favicon: 'img/favicon.ico',
-
+  trailingSlash: false,
   // Set the production URL of your site
   url: 'https://singletonmatrix.com', // Custom domain
   // Set the base URL where your site is served
