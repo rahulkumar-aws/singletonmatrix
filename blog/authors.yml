@@ -1,3 +1,13 @@
+rahulkumar:
+  name: Rahul Kumar
+  title: Senior Data Engineer @ AON
+  url: https://github.com/rahulkumar-aws
+  image_url: https://github.com/rahulkumar-aws.png
+  page: true
+  socials:
+    x: rahul_kumar_aws
+    github: rahulkumar-aws
+
 yangshun:
   name: Yangshun Tay
   title: Front End Engineer @ Facebook
