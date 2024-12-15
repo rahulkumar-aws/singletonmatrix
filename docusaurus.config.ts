@@ -7,18 +7,17 @@ const config: Config = {
   tagline: 'Explore, Learn, Innovate',
   favicon: 'img/favicon.ico',
   trailingSlash: false,
-  // Set the production URL of your site
+  // Set the production URL of your site (your custom domain)
   url: 'https://singletonmatrix.com', // Custom domain
   // Set the base URL where your site is served
   // '/' for custom domain, '/singletonmatrix/' for GitHub Pages default URL
-  // baseUrl: process.env.USE_CUSTOM_DOMAIN === 'true' ? '/' : '/singletonmatrix/',
   baseUrl: '/',
 
   // GitHub Pages deployment config
   organizationName: 'rahulkumar-aws', // Your GitHub username
   projectName: 'singletonmatrix', // Your GitHub repository name
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'throw', // Stop the build for broken links
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
@@ -32,7 +31,7 @@ const config: Config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: require.resolve('./sidebars.js'), // Sidebar configuration
           editUrl: 'https://github.com/rahulkumar-aws/singletonmatrix/edit/main/',
         },
         blog: {
@@ -44,7 +43,7 @@ const config: Config = {
           editUrl: 'https://github.com/rahulkumar-aws/singletonmatrix/edit/main/',
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve('./src/css/custom.css'), // Path to custom CSS
         },
       } satisfies Preset.Options),
     ],
@@ -57,12 +56,12 @@ const config: Config = {
       title: 'Singleton Matrix',
       logo: {
         alt: 'Singleton Matrix Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.svg', // Path to your logo
       },
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'tutorialSidebar', // Reference the tutorial sidebar
           position: 'left',
           label: 'Docs',
         },
@@ -82,7 +81,7 @@ const config: Config = {
           items: [
             {
               label: 'Tutorial',
-              to: '/docs/intro',
+              to: '/docs/intro', // Path to the intro doc
             },
           ],
         },
