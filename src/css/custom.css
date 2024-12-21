@@ -1,30 +1,66 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Global overrides for an Apple-inspired color scheme and typography.
+ * Includes Apple system fonts for better consistency with Apple's design language.
  */
 
-/* You can override the default Infima variables here. */
+/* Light Theme */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-font-family-base: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --ifm-font-family-monospace: 'SF Mono', 'Courier New', Courier, monospace;
+
+  --ifm-color-primary: #0071e3; /* Apple's signature blue */
+  --ifm-color-primary-dark: #005bb5; /* Darker blue for hover */
+  --ifm-color-primary-darker: #004b99; /* Even darker blue */
+  --ifm-color-primary-darkest: #003a73; /* Darkest blue */
+  --ifm-color-primary-light: #3393ff; /* Lighter blue */
+  --ifm-color-primary-lighter: #66b5ff; /* Very light blue */
+  --ifm-color-primary-lightest: #cce7ff; /* Lightest blue for backgrounds */
+  --ifm-code-font-size: 95%; /* Consistent font size for code blocks */
+  --docusaurus-highlighted-code-line-bg: rgba(0, 113, 227, 0.1); /* Subtle blue for highlighted code */
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Dark Theme */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-font-family-base: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --ifm-font-family-monospace: 'SF Mono', 'Courier New', Courier, monospace;
+
+  --ifm-color-primary: #0aa9ff; /* Vibrant cyan for dark mode */
+  --ifm-color-primary-dark: #008ccf; /* Slightly darker cyan for hover */
+  --ifm-color-primary-darker: #0077b5; /* Darker shade of cyan */
+  --ifm-color-primary-darkest: #005c8a; /* Darkest cyan */
+  --ifm-color-primary-light: #33bfff; /* Lighter cyan */
+  --ifm-color-primary-lighter: #66d5ff; /* Very light cyan */
+  --ifm-color-primary-lightest: #ccefff; /* Lightest cyan for backgrounds */
+  --docusaurus-highlighted-code-line-bg: rgba(10, 169, 255, 0.2); /* Cyan highlight for code blocks */
+}
+
+/* General Typography */
+body {
+  font-family: var(--ifm-font-family-base);
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-color-text);
+}
+
+code {
+  font-family: var(--ifm-font-family-monospace);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Links */
+a {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--ifm-color-primary-dark);
 }
