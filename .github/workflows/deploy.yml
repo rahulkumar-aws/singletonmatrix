@@ -3,7 +3,7 @@ name: Deploy Docusaurus to GitHub Pages
 on:
   push:
     branches:
-      - main  # Replace 'main' with your default branch if different
+      - main
 
 permissions:
   contents: write
@@ -14,44 +14,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout code from the main branch
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    # Step 2: Set up Node.js environment
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 18
         cache: yarn
 
-    # Step 3: Install dependencies and build the site
-    - name: Install dependencies and build site
+    - name: Install dependencies and build
       run: |
         yarn install --frozen-lockfile
         yarn build
-        echo 'singletonmatrix.com' > ./build/CNAME  # Add your custom domain (if applicable)
+        echo 'singletonmatrix.com' > ./build/CNAME
 
-    # Step 4: Clean the gh-pages branch (optional but recommended)
-    - name: Checkout gh-pages branch
-      uses: actions/checkout@v4
-      with:
-        ref: gh-pages  # Checkout the gh-pages branch
-    - name: Clean gh-pages branch
-      run: |
-        rm -rf ./*    # Remove all files in the branch
-        git add -A    # Stage changes
-        git commit -m "Clean gh-pages branch" || echo "Branch already clean"
-
-    # Step 5: Deploy to GitHub Pages
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages  # Target branch for deployment
-        publish_dir: ./build      # Directory containing the built site
-        force_orphan: true        # Ensure a clean deployment
+        publish_branch: gh-pages
+        publish_dir: ./build
         user_name: github-actions[bot]
         user_email: 41898282+github-actions[bot]@users.noreply.github.com
