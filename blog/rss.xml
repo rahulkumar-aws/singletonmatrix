@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="rss.xsl"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>Singleton Matrix Blog</title>
+        <link>https://singletonmatrix.com/blog</link>
+        <description>Singleton Matrix Blog</description>
+        <lastBuildDate>Fri, 27 Dec 2024 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <item>
+            <title><![CDATA[Designing Your Own Firewall: Concepts and Implementation]]></title>
+            <link>https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog</link>
+            <guid>https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog</guid>
+            <pubDate>Fri, 27 Dec 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[A firewall is a crucial component in any network security architecture. While off-the-shelf solutions are widely available, there may be scenarios where designing a custom firewall is necessary—whether for specialized applications, unique traffic filtering needs, or educational purposes. This blog provides a comprehensive overview of how to design and implement your own firewall.]]></description>
+            <content:encoded><![CDATA[<p>A firewall is a crucial component in any network security architecture. While off-the-shelf solutions are widely available, there may be scenarios where designing a custom firewall is necessary—whether for specialized applications, unique traffic filtering needs, or educational purposes. This blog provides a comprehensive overview of how to design and implement your own firewall.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="key-components-of-a-custom-firewall">Key Components of a Custom Firewall<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#key-components-of-a-custom-firewall" class="hash-link" aria-label="Direct link to Key Components of a Custom Firewall" title="Direct link to Key Components of a Custom Firewall">​</a></h2>
+<ol>
+<li>
+<p><strong>Packet Inspection Engine</strong>:</p>
+<ul>
+<li>The core of the firewall, responsible for analyzing incoming and outgoing packets.</li>
+<li>Determines whether packets should be allowed, blocked, or modified based on predefined rules.</li>
+</ul>
+</li>
+<li>
+<p><strong>Rule Management System</strong>:</p>
+<ul>
+<li>Stores filtering rules (e.g., allow or block based on IP, port, or protocol).</li>
+<li>Allows administrators to add, modify, or delete rules dynamically.</li>
+</ul>
+</li>
+<li>
+<p><strong>Logging and Monitoring</strong>:</p>
+<ul>
+<li>Tracks all traffic decisions (e.g., packets allowed or blocked).</li>
+<li>Provides insights into network activity and potential threats.</li>
+</ul>
+</li>
+<li>
+<p><strong>User Interface</strong>:</p>
+<ul>
+<li>A dashboard for administrators to configure rules and monitor real-time traffic.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="system-design-architecture">System Design Architecture<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#system-design-architecture" class="hash-link" aria-label="Direct link to System Design Architecture" title="Direct link to System Design Architecture">​</a></h2>
+<ol>
+<li>
+<p><strong>Traffic Interception</strong>:</p>
+<ul>
+<li>Intercepts all incoming and outgoing traffic using tools like raw sockets or packet capture libraries.</li>
+</ul>
+</li>
+<li>
+<p><strong>Packet Filtering</strong>:</p>
+<ul>
+<li>Analyzes packet headers (e.g., IP, TCP/UDP) and payloads.</li>
+<li>Matches packets against rules stored in the rule management system.</li>
+</ul>
+</li>
+<li>
+<p><strong>Rule Enforcement</strong>:</p>
+<ul>
+<li>Blocks, forwards, or modifies packets based on rule matches.</li>
+</ul>
+</li>
+<li>
+<p><strong>Action Logging</strong>:</p>
+<ul>
+<li>Logs decisions for compliance, auditing, and troubleshooting purposes.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="implementation-steps">Implementation Steps<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#implementation-steps" class="hash-link" aria-label="Direct link to Implementation Steps" title="Direct link to Implementation Steps">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-packet-sniffing"><strong>1. Packet Sniffing</strong><a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#1-packet-sniffing" class="hash-link" aria-label="Direct link to 1-packet-sniffing" title="Direct link to 1-packet-sniffing">​</a></h3>
+<p>Capture network packets using libraries like <code>pcap</code> or tools like <code>scapy</code>.</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="python-example-using-scapy">Python Example Using Scapy:<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#python-example-using-scapy" class="hash-link" aria-label="Direct link to Python Example Using Scapy:" title="Direct link to Python Example Using Scapy:">​</a></h4>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> scapy</span><span class="token punctuation" style="color:#393A34">.</span><span class="token builtin">all</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> sniff</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Function to handle packets</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">process_packet</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">packet</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">packet</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">summary</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Capture packets</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sniff</span><span class="token punctuation" style="color:#393A34">(</span><span class="token builtin">filter</span><span class="token operator" style="color:#393A34">=</span><span class="token string" style="color:#e3116c">"tcp"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> prn</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">process_packet</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-rule-management"><strong>2. Rule Management</strong><a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#2-rule-management" class="hash-link" aria-label="Direct link to 2-rule-management" title="Direct link to 2-rule-management">​</a></h3>
+<p>Define and manage rules for filtering traffic. Each rule should specify criteria (e.g., source IP, destination IP, port, protocol) and an action (allow or block).</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="example-rule-definition">Example Rule Definition:<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#example-rule-definition" class="hash-link" aria-label="Direct link to Example Rule Definition:" title="Direct link to Example Rule Definition:">​</a></h4>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">rules </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">"src_ip"</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"192.168.1.10"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"port"</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">80</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"action"</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"block"</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">"src_ip"</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"0.0.0.0/0"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"port"</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">443</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"action"</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"allow"</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">]</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="packet-matching-function">Packet Matching Function:<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#packet-matching-function" class="hash-link" aria-label="Direct link to Packet Matching Function:" title="Direct link to Packet Matching Function:">​</a></h4>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">match_rule</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">packet</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> rules</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> rule </span><span class="token keyword" style="color:#00009f">in</span><span class="token plain"> rules</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> packet</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">"IP"</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">src </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> rule</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">"src_ip"</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">and</span><span class="token plain"> packet</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">"TCP"</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">dport </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> rule</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">"port"</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> rule</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">"action"</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"allow"</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic"># Default action</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-packet-blocking-and-forwarding"><strong>3. Packet Blocking and Forwarding</strong><a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#3-packet-blocking-and-forwarding" class="hash-link" aria-label="Direct link to 3-packet-blocking-and-forwarding" title="Direct link to 3-packet-blocking-and-forwarding">​</a></h3>
+<ul>
+<li><strong>Blocking Packets</strong>:<!-- -->
+<ul>
+<li>Intercept packets and prevent them from being processed further by the operating system.</li>
+</ul>
+</li>
+<li><strong>Forwarding Packets</strong>:<!-- -->
+<ul>
+<li>Allow packets to pass through the firewall after validation.</li>
+</ul>
+</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="example-blocking-logic">Example Blocking Logic:<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#example-blocking-logic" class="hash-link" aria-label="Direct link to Example Blocking Logic:" title="Direct link to Example Blocking Logic:">​</a></h4>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">block_packet</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">packet</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f"Blocked packet: </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">packet</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation">summary</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">(</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">)</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">"</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="4-logging-and-monitoring"><strong>4. Logging and Monitoring</strong><a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#4-logging-and-monitoring" class="hash-link" aria-label="Direct link to 4-logging-and-monitoring" title="Direct link to 4-logging-and-monitoring">​</a></h3>
+<p>Track all packet decisions for auditing and analysis.</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="logging-example">Logging Example:<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#logging-example" class="hash-link" aria-label="Direct link to Logging Example:" title="Direct link to Logging Example:">​</a></h4>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">with</span><span class="token plain"> </span><span class="token builtin">open</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">"firewall.log"</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"a"</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">as</span><span class="token plain"> log_file</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    log_file</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">write</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">f"</span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain">packet</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">summary</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">"</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="enhancements">Enhancements<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#enhancements" class="hash-link" aria-label="Direct link to Enhancements" title="Direct link to Enhancements">​</a></h2>
+<ol>
+<li>
+<p><strong>Intrusion Detection System (IDS)</strong>:</p>
+<ul>
+<li>Add functionality to detect suspicious patterns or anomalies in network traffic.</li>
+</ul>
+</li>
+<li>
+<p><strong>Web Application Firewall (WAF)</strong>:</p>
+<ul>
+<li>Extend functionality to inspect and filter HTTP traffic for common vulnerabilities like SQL injection or cross-site scripting (XSS).</li>
+</ul>
+</li>
+<li>
+<p><strong>Scalability</strong>:</p>
+<ul>
+<li>Use distributed systems to handle high traffic volumes.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="deployment-strategy">Deployment Strategy<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#deployment-strategy" class="hash-link" aria-label="Direct link to Deployment Strategy" title="Direct link to Deployment Strategy">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="on-premises-deployment"><strong>On-Premises Deployment</strong><a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#on-premises-deployment" class="hash-link" aria-label="Direct link to on-premises-deployment" title="Direct link to on-premises-deployment">​</a></h3>
+<ol>
+<li>Install the firewall on a dedicated hardware appliance or server.</li>
+<li>Configure network routing to pass all traffic through the firewall.</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cloud-deployment"><strong>Cloud Deployment</strong><a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#cloud-deployment" class="hash-link" aria-label="Direct link to cloud-deployment" title="Direct link to cloud-deployment">​</a></h3>
+<ol>
+<li>Deploy the firewall as a virtual appliance in the cloud.</li>
+<li>Integrate with cloud-native networking services (e.g., AWS VPC, Azure VNet).</li>
+<li>Use APIs for dynamic rule updates.</li>
+</ol>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="example-cloud-based-firewall-deployment">Example: Cloud-Based Firewall Deployment<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#example-cloud-based-firewall-deployment" class="hash-link" aria-label="Direct link to Example: Cloud-Based Firewall Deployment" title="Direct link to Example: Cloud-Based Firewall Deployment">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="aws-example-using-ec2-instance">AWS Example Using EC2 Instance:<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#aws-example-using-ec2-instance" class="hash-link" aria-label="Direct link to AWS Example Using EC2 Instance:" title="Direct link to AWS Example Using EC2 Instance:">​</a></h3>
+<ol>
+<li>Launch an EC2 instance to run the custom firewall.</li>
+<li>Configure the instance as a gateway for your VPC.</li>
+<li>Use AWS Security Groups to control access to the instance.</li>
+</ol>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="example-terraform-configuration-for-aws">Example Terraform Configuration for AWS:<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#example-terraform-configuration-for-aws" class="hash-link" aria-label="Direct link to Example Terraform Configuration for AWS:" title="Direct link to Example Terraform Configuration for AWS:">​</a></h4>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_instance" "firewall" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ami           = "ami-12345678"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  instance_type = "t2.micro"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  tags = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    Name = "CustomFirewall"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_security_group" "firewall_sg" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name = "firewall-sg"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ingress {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    from_port   = 22</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    to_port     = 22</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    protocol    = "tcp"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    cidr_blocks = ["0.0.0.0/0"]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  egress {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    from_port   = 0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    to_port     = 0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    protocol    = "-1"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    cidr_blocks = ["0.0.0.0/0"]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="azure-example-using-virtual-machine">Azure Example Using Virtual Machine:<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#azure-example-using-virtual-machine" class="hash-link" aria-label="Direct link to Azure Example Using Virtual Machine:" title="Direct link to Azure Example Using Virtual Machine:">​</a></h3>
+<ol>
+<li>Launch a Virtual Machine in Azure to host the custom firewall.</li>
+<li>Assign a Network Security Group (NSG) to the VM.</li>
+<li>Configure inbound and outbound rules in the NSG.</li>
+</ol>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="example-terraform-configuration-for-azure">Example Terraform Configuration for Azure:<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#example-terraform-configuration-for-azure" class="hash-link" aria-label="Direct link to Example Terraform Configuration for Azure:" title="Direct link to Example Terraform Configuration for Azure:">​</a></h4>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource "azurerm_virtual_network" "vnet" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name                = "firewall-vnet"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  address_space       = ["10.0.0.0/16"]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  location            = "East US"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  resource_group_name = "firewall-rg"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resource "azurerm_network_security_group" "firewall_nsg" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name                = "firewall-nsg"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  location            = "East US"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  resource_group_name = "firewall-rg"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  security_rule {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    name                       = "Allow-SSH"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    priority                   = 100</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    direction                  = "Inbound"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    access                     = "Allow"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    protocol                   = "Tcp"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    source_port_range          = "*"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    destination_port_range     = "22"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    source_address_prefix      = "*"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    destination_address_prefix = "*"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resource "azurerm_network_interface" "firewall_nic" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name                = "firewall-nic"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  location            = "East US"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  resource_group_name = "firewall-rg"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ip_configuration {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    name                          = "internal"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    subnet_id                     = azurerm_virtual_network.vnet.id</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    private_ip_address_allocation = "Dynamic"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resource "azurerm_linux_virtual_machine" "firewall_vm" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name                = "firewall-vm"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  location            = "East US"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  resource_group_name = "firewall-rg"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  size                = "Standard_B1ms"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  admin_username      = "adminuser"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  admin_password      = "Password1234!"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  network_interface_ids = [azurerm_network_interface.firewall_nic.id]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  os_disk {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    caching              = "ReadWrite"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    storage_account_type = "Standard_LRS"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  source_image_reference {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    publisher = "Canonical"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    offer     = "UbuntuServer"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    sku       = "18.04-LTS"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    version   = "latest"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="benefits-of-a-custom-firewall">Benefits of a Custom Firewall<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#benefits-of-a-custom-firewall" class="hash-link" aria-label="Direct link to Benefits of a Custom Firewall" title="Direct link to Benefits of a Custom Firewall">​</a></h2>
+<ol>
+<li>
+<p><strong>Flexibility</strong>:</p>
+<ul>
+<li>Tailor rules and functionality to meet specific needs.</li>
+</ul>
+</li>
+<li>
+<p><strong>Cost Efficiency</strong>:</p>
+<ul>
+<li>Avoid expensive commercial solutions by leveraging open-source tools.</li>
+</ul>
+</li>
+<li>
+<p><strong>Educational Value</strong>:</p>
+<ul>
+<li>Gain a deeper understanding of network security and packet-level operations.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="conclusion">Conclusion<a href="https://singletonmatrix.com/blog/2024/12/27/custom-firewall-blog/custom_firewall_blog#conclusion" class="hash-link" aria-label="Direct link to Conclusion" title="Direct link to Conclusion">​</a></h2>
+<p>Building your own firewall offers unmatched flexibility and control over network security. By understanding the key components and leveraging modern tools and libraries, you can design a robust solution tailored to specific requirements. Whether deployed on-premises or in the cloud, a custom firewall can provide valuable insights and protections for your network.</p>
+<p>Start small, iterate, and expand your design to include advanced features like intrusion detection and web application filtering for a comprehensive security solution.</p>]]></content:encoded>
+            <category>Networking</category>
+            <category>Security</category>
+            <category>Firewall</category>
+        </item>
+        <item>
+            <title><![CDATA[Understanding Firewalls in Operating Systems and Cloud Environments]]></title>
+            <link>https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud</link>
+            <guid>https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud</guid>
+            <pubDate>Sun, 22 Dec 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Firewalls are essential components of modern network security, serving as a protective barrier between trusted and untrusted networks. Whether on-premises or in the cloud, firewalls monitor and control traffic to enforce security policies. This blog explores the role of firewalls in operating systems (OS) and cloud environments, highlighting their similarities, differences, and best practices for cloud usage.]]></description>
+            <content:encoded><![CDATA[<p>Firewalls are essential components of modern network security, serving as a protective barrier between trusted and untrusted networks. Whether on-premises or in the cloud, firewalls monitor and control traffic to enforce security policies. This blog explores the role of firewalls in operating systems (OS) and cloud environments, highlighting their similarities, differences, and best practices for cloud usage.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="what-is-a-firewall">What Is a Firewall?<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#what-is-a-firewall" class="hash-link" aria-label="Direct link to What Is a Firewall?" title="Direct link to What Is a Firewall?">​</a></h2>
+<p>A <strong>firewall</strong> is a security device or software designed to monitor and control incoming and outgoing network traffic. Firewalls enforce policies based on pre-configured rules to prevent unauthorized access and protect systems from malicious traffic.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="firewalls-in-operating-systems">Firewalls in Operating Systems<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#firewalls-in-operating-systems" class="hash-link" aria-label="Direct link to Firewalls in Operating Systems" title="Direct link to Firewalls in Operating Systems">​</a></h2>
+<p>Firewalls integrated with operating systems operate at the host level, safeguarding individual devices. These are often referred to as <strong>host-based firewalls</strong>.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="key-features">Key Features<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#key-features" class="hash-link" aria-label="Direct link to Key Features" title="Direct link to Key Features">​</a></h3>
+<ol>
+<li>
+<p><strong>Location</strong>:</p>
+<ul>
+<li>Positioned within the OS networking stack, filtering traffic before it reaches applications or leaves the system.</li>
+</ul>
+</li>
+<li>
+<p><strong>Types</strong>:</p>
+<ul>
+<li><strong>Packet Filtering Firewalls</strong>: Inspect packets at the network layer based on IP, port, and protocol.</li>
+<li><strong>Stateful Firewalls</strong>: Monitor connection states and allow only legitimate traffic.</li>
+</ul>
+</li>
+<li>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li><strong>Windows Firewall</strong>: Built into Windows OS, offering GUI and command-line control.</li>
+<li><strong>iptables/nftables</strong>: Commonly used in Linux for detailed traffic filtering.</li>
+<li><strong>pf</strong>: Used in macOS and BSD systems.</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-example-linux-iptables">Configuration Example: Linux iptables<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#configuration-example-linux-iptables" class="hash-link" aria-label="Direct link to Configuration Example: Linux iptables" title="Direct link to Configuration Example: Linux iptables">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Allow SSH traffic</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">iptables -A INPUT -p tcp --dport 22 -j ACCEPT</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Drop all other incoming traffic</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">iptables -A INPUT -j DROP</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="firewalls-in-cloud-environments">Firewalls in Cloud Environments<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#firewalls-in-cloud-environments" class="hash-link" aria-label="Direct link to Firewalls in Cloud Environments" title="Direct link to Firewalls in Cloud Environments">​</a></h2>
+<p>Cloud firewalls operate at a broader scale, managing traffic across multiple virtual resources like virtual machines (VMs), containers, and managed services. These are often categorized as <strong>network firewalls</strong> or <strong>perimeter firewalls</strong>.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="key-features-1">Key Features<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#key-features-1" class="hash-link" aria-label="Direct link to Key Features" title="Direct link to Key Features">​</a></h3>
+<ol>
+<li>
+<p><strong>Location</strong>:</p>
+<ul>
+<li>Positioned within the cloud provider's network infrastructure, controlling traffic at the virtual network or subnet level.</li>
+</ul>
+</li>
+<li>
+<p><strong>Types</strong>:</p>
+<ul>
+<li><strong>Network Security Groups (NSGs)</strong>: Define inbound and outbound traffic rules for specific cloud resources.</li>
+<li><strong>Perimeter Firewalls</strong>: Apply rules for traffic entering or leaving a Virtual Private Cloud (VPC) or Virtual Network (VNet).</li>
+<li><strong>Web Application Firewalls (WAFs)</strong>: Protect web applications from common vulnerabilities like SQL injection and XSS.</li>
+</ul>
+</li>
+<li>
+<p><strong>Examples by Cloud Provider</strong>:</p>
+<ul>
+<li><strong>AWS</strong>:<!-- -->
+<ul>
+<li><strong>Security Groups</strong>: Host-based firewall rules.</li>
+<li><strong>Network ACLs</strong>: Subnet-level traffic filtering.</li>
+<li><strong>AWS WAF</strong>: Web application security.</li>
+</ul>
+</li>
+<li><strong>Azure</strong>:<!-- -->
+<ul>
+<li><strong>NSGs</strong>: Control VM and subnet traffic.</li>
+<li><strong>Azure Firewall</strong>: Centralized, managed firewall service.</li>
+</ul>
+</li>
+<li><strong>GCP</strong>:<!-- -->
+<ul>
+<li><strong>VPC Firewall Rules</strong>: Apply to resources within a VPC.</li>
+<li><strong>Cloud Armor</strong>: WAF for HTTP(S) applications.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cloud-firewall-capabilities">Cloud Firewall Capabilities<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#cloud-firewall-capabilities" class="hash-link" aria-label="Direct link to Cloud Firewall Capabilities" title="Direct link to Cloud Firewall Capabilities">​</a></h3>
+<ul>
+<li>
+<p><strong>Centralized Management</strong>:</p>
+<ul>
+<li>Cloud firewalls allow centralized rule creation and enforcement across multiple resources.</li>
+</ul>
+</li>
+<li>
+<p><strong>Scalability</strong>:</p>
+<ul>
+<li>Automatically adapts to changes in infrastructure, such as autoscaling.</li>
+</ul>
+</li>
+<li>
+<p><strong>Threat Intelligence</strong>:</p>
+<ul>
+<li>Integrates with threat detection systems for proactive security (e.g., AWS Shield, Azure Threat Protection).</li>
+</ul>
+</li>
+<li>
+<p><strong>Logging and Monitoring</strong>:</p>
+<ul>
+<li>Provides centralized logs for compliance and forensic analysis.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="cloud-firewall-configuration-examples">Cloud Firewall Configuration Examples<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#cloud-firewall-configuration-examples" class="hash-link" aria-label="Direct link to Cloud Firewall Configuration Examples" title="Direct link to Cloud Firewall Configuration Examples">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-aws-security-groups">1. AWS Security Groups<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#1-aws-security-groups" class="hash-link" aria-label="Direct link to 1. AWS Security Groups" title="Direct link to 1. AWS Security Groups">​</a></h3>
+<p>Security Groups act as virtual firewalls for EC2 instances. Example configuration:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Allow HTTP (80) and HTTPS (443) inbound traffic</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Inbound Rules:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- Type: HTTP    Protocol: TCP    Port: 80    Source: 0.0.0.0/0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- Type: HTTPS   Protocol: TCP    Port: 443   Source: 0.0.0.0/0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Allow all outbound traffic</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Outbound Rules:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- Type: All Traffic    Protocol: All    Port Range: All    Destination: 0.0.0.0/0</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-azure-nsgs">2. Azure NSGs<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#2-azure-nsgs" class="hash-link" aria-label="Direct link to 2. Azure NSGs" title="Direct link to 2. Azure NSGs">​</a></h3>
+<p>NSGs filter traffic at the subnet or VM level. Example configuration:</p>
+<div class="language-plaintext codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-plaintext codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Rule Name: Allow-SSH</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Priority: 100</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Source: Any</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Source Port: Any</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Destination: VirtualNetwork</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Destination Port: 22</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Protocol: TCP</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Action: Allow</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="additional-azure-nsg-example-restricting-rdp-access">Additional Azure NSG Example: Restricting RDP Access<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#additional-azure-nsg-example-restricting-rdp-access" class="hash-link" aria-label="Direct link to Additional Azure NSG Example: Restricting RDP Access" title="Direct link to Additional Azure NSG Example: Restricting RDP Access">​</a></h4>
+<div class="language-plaintext codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-plaintext codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Rule Name: Restrict-RDP</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Priority: 200</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Source: Any</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Source Port: Any</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Destination: VirtualNetwork</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Destination Port: 3389</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Protocol: TCP</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Action: Deny</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="azure-firewall-application-rule-collection-example">Azure Firewall: Application Rule Collection Example<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#azure-firewall-application-rule-collection-example" class="hash-link" aria-label="Direct link to Azure Firewall: Application Rule Collection Example" title="Direct link to Azure Firewall: Application Rule Collection Example">​</a></h3>
+<p>Azure Firewall enables defining application-specific rules for outbound traffic:</p>
+<div class="language-plaintext codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-plaintext codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Rule Name: Allow-Web</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Priority: 100</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Action: Allow</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Target FQDNs: *.microsoft.com, *.azure.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Protocols: HTTP, HTTPS</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="azure-firewall-network-rule-collection-example">Azure Firewall: Network Rule Collection Example<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#azure-firewall-network-rule-collection-example" class="hash-link" aria-label="Direct link to Azure Firewall: Network Rule Collection Example" title="Direct link to Azure Firewall: Network Rule Collection Example">​</a></h4>
+<div class="language-plaintext codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-plaintext codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Rule Name: Allow-DNS</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Priority: 100</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Action: Allow</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Source IP: 10.0.0.0/16</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Destination IP: 8.8.8.8</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Protocol: UDP</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Destination Port: 53</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-gcp-vpc-firewall-rules">3. GCP VPC Firewall Rules<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#3-gcp-vpc-firewall-rules" class="hash-link" aria-label="Direct link to 3. GCP VPC Firewall Rules" title="Direct link to 3. GCP VPC Firewall Rules">​</a></h3>
+<p>GCP VPC Firewall Rules control access at the VPC level. Example rule:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Allow SSH traffic to all instances in a VPC</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Direction: Ingress</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Action: Allow</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Protocol: TCP</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Port: 22</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Source IP: 0.0.0.0/0</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="benefits-of-cloud-firewalls">Benefits of Cloud Firewalls<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#benefits-of-cloud-firewalls" class="hash-link" aria-label="Direct link to Benefits of Cloud Firewalls" title="Direct link to Benefits of Cloud Firewalls">​</a></h2>
+<ol>
+<li>
+<p><strong>Granular Control</strong>:</p>
+<ul>
+<li>Define specific rules for individual instances, subnets, or entire virtual networks.</li>
+</ul>
+</li>
+<li>
+<p><strong>Integrated Security</strong>:</p>
+<ul>
+<li>Seamlessly integrates with cloud-native services like IAM and monitoring tools.</li>
+</ul>
+</li>
+<li>
+<p><strong>High Availability</strong>:</p>
+<ul>
+<li>Managed firewalls ensure availability and redundancy without manual configuration.</li>
+</ul>
+</li>
+<li>
+<p><strong>Cost Efficiency</strong>:</p>
+<ul>
+<li>Pay-as-you-go pricing eliminates the need for expensive hardware firewalls.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="deployment-strategies-for-cloud-firewalls">Deployment Strategies for Cloud Firewalls<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#deployment-strategies-for-cloud-firewalls" class="hash-link" aria-label="Direct link to Deployment Strategies for Cloud Firewalls" title="Direct link to Deployment Strategies for Cloud Firewalls">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-start-with-least-privilege">1. <strong>Start with Least Privilege</strong><a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#1-start-with-least-privilege" class="hash-link" aria-label="Direct link to 1-start-with-least-privilege" title="Direct link to 1-start-with-least-privilege">​</a></h3>
+<ul>
+<li>Allow only necessary traffic and deny everything else.</li>
+<li>Example: Default deny-all rule in AWS Security Groups.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-use-layered-security">2. <strong>Use Layered Security</strong><a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#2-use-layered-security" class="hash-link" aria-label="Direct link to 2-use-layered-security" title="Direct link to 2-use-layered-security">​</a></h3>
+<ul>
+<li>Combine host-based firewalls (OS-level) with cloud firewalls for a defense-in-depth approach.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-automate-rule-management">3. <strong>Automate Rule Management</strong><a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#3-automate-rule-management" class="hash-link" aria-label="Direct link to 3-automate-rule-management" title="Direct link to 3-automate-rule-management">​</a></h3>
+<ul>
+<li>Use Infrastructure as Code (IaC) tools like Terraform to define and deploy firewall rules.</li>
+</ul>
+<p>Example Terraform for AWS Security Group:</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource "aws_security_group" "example" {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name        = "example-sg"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  description = "Example security group"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ingress {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    from_port   = 80</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    to_port     = 80</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    protocol    = "tcp"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    cidr_blocks = ["0.0.0.0/0"]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  egress {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    from_port   = 0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    to_port     = 0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    protocol    = "-1"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    cidr_blocks = ["0.0.0.0/0"]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="os-firewalls-vs-cloud-firewalls">OS Firewalls vs. Cloud Firewalls<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#os-firewalls-vs-cloud-firewalls" class="hash-link" aria-label="Direct link to OS Firewalls vs. Cloud Firewalls" title="Direct link to OS Firewalls vs. Cloud Firewalls">​</a></h2>
+<table><thead><tr><th>Feature</th><th>OS Firewalls</th><th>Cloud Firewalls</th></tr></thead><tbody><tr><td><strong>Scope</strong></td><td>Protect individual devices.</td><td>Manage traffic across resources.</td></tr><tr><td><strong>Management</strong></td><td>Configured per device.</td><td>Centrally managed.</td></tr><tr><td><strong>Scalability</strong></td><td>Limited to local resources.</td><td>Dynamic and scalable.</td></tr><tr><td><strong>Integration</strong></td><td>Works with the local system.</td><td>Integrates with cloud services.</td></tr><tr><td><strong>Cost</strong></td><td>No additional cost.</td><td>Pay-as-you-go pricing.</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="conclusion">Conclusion<a href="https://singletonmatrix.com/blog/2024/12/22/firewalls-in-os-and-cloud/firewalls_in_os_and_cloud#conclusion" class="hash-link" aria-label="Direct link to Conclusion" title="Direct link to Conclusion">​</a></h2>
+<p>Firewalls play a vital role in securing both on-premises and cloud environments. While OS firewalls protect individual devices, cloud firewalls offer broader, scalable solutions for managing network traffic across complex infrastructures. Combining both ensures a robust, layered security approach, safeguarding resources from evolving threats.</p>
+<p>By leveraging the advanced capabilities of cloud firewalls in AWS, Azure, and GCP, organizations can enhance security while maintaining flexibility and cost-efficiency. Whether deploying a simple application or managing a multi-cloud infrastructure, a well-configured firewall strategy is essential for operational success.</p>]]></content:encoded>
+            <category>Networking</category>
+            <category>Security</category>
+            <category>Firewall</category>
+            <category>AWS</category>
+            <category>Azure</category>
+        </item>
+        <item>
+            <title><![CDATA[Understanding the Number of Ports an Operating System Can Have]]></title>
+            <link>https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports</link>
+            <guid>https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports</guid>
+            <pubDate>Fri, 20 Dec 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[When discussing ports in the context of operating systems, it's essential to understand how they relate to networking. Ports are integral to the TCP/IP and UDP protocol stacks, enabling multiple communication endpoints to coexist on a single machine. This blog delves into the technicalities of how many ports an OS can support, the factors that influence this number, and practical considerations for their usage.]]></description>
+            <content:encoded><![CDATA[<p>When discussing ports in the context of operating systems, it's essential to understand how they relate to networking. Ports are integral to the TCP/IP and UDP protocol stacks, enabling multiple communication endpoints to coexist on a single machine. This blog delves into the technicalities of how many ports an OS can support, the factors that influence this number, and practical considerations for their usage.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="what-are-ports">What Are Ports?<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#what-are-ports" class="hash-link" aria-label="Direct link to What Are Ports?" title="Direct link to What Are Ports?">​</a></h2>
+<p>A <strong>port</strong> is a logical construct that identifies a specific process or service running on a device. When combined with an IP address, a port creates a <strong>socket</strong>, which serves as a unique communication endpoint in a networked environment. Ports are defined by 16-bit numbers, ranging from <strong>0 to 65,535</strong>.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="port-ranges">Port Ranges<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#port-ranges" class="hash-link" aria-label="Direct link to Port Ranges" title="Direct link to Port Ranges">​</a></h3>
+<p>Ports are categorized into three ranges:</p>
+<ol>
+<li>
+<p><strong>Well-Known Ports (0–1023)</strong>:</p>
+<ul>
+<li>Reserved for common services like HTTP (port 80), HTTPS (port 443), SSH (port 22), and DNS (port 53).</li>
+<li>Managed and standardized by the Internet Assigned Numbers Authority (IANA).</li>
+</ul>
+</li>
+<li>
+<p><strong>Registered Ports (1024–49,151)</strong>:</p>
+<ul>
+<li>Assigned to specific applications by IANA to avoid conflicts.</li>
+<li>Commonly used by applications such as databases, messaging services, and proprietary protocols.</li>
+</ul>
+</li>
+<li>
+<p><strong>Dynamic/Ephemeral Ports (49,152–65,535)</strong>:</p>
+<ul>
+<li>Temporarily assigned by the OS for client-side communication.</li>
+<li>Used in outgoing connections and automatically released after the session ends.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="how-many-ports-can-an-os-have">How Many Ports Can an OS Have?<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#how-many-ports-can-an-os-have" class="hash-link" aria-label="Direct link to How Many Ports Can an OS Have?" title="Direct link to How Many Ports Can an OS Have?">​</a></h2>
+<p>The theoretical maximum number of ports an OS can manage is <strong>65,535 per IP address per protocol</strong> (TCP or UDP). However, the actual number of usable ports depends on various factors:</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-number-of-ip-addresses">1. <strong>Number of IP Addresses</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#1-number-of-ip-addresses" class="hash-link" aria-label="Direct link to 1-number-of-ip-addresses" title="Direct link to 1-number-of-ip-addresses">​</a></h3>
+<p>Each IP address on a machine can support its own set of 65,535 ports. A system with multiple IP addresses (e.g., via multiple NICs or virtual interfaces) can exponentially increase its port capacity:</p>
+<ul>
+<li>1 IP address: 65,535 ports</li>
+<li>5 IP addresses: 5 × 65,535 = 327,675 ports</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-protocols">2. <strong>Protocols</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#2-protocols" class="hash-link" aria-label="Direct link to 2-protocols" title="Direct link to 2-protocols">​</a></h3>
+<p>Each protocol has its own set of ports:</p>
+<ul>
+<li><strong>TCP</strong>: Reliable, connection-oriented protocol.</li>
+<li><strong>UDP</strong>: Connectionless, lightweight protocol.</li>
+</ul>
+<p>A single IP address can therefore manage 65,535 TCP ports and 65,535 UDP ports simultaneously.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-system-configuration-and-limits">3. <strong>System Configuration and Limits</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#3-system-configuration-and-limits" class="hash-link" aria-label="Direct link to 3-system-configuration-and-limits" title="Direct link to 3-system-configuration-and-limits">​</a></h3>
+<p>While the theoretical limit is high, practical constraints often reduce the number of active ports:</p>
+<ul>
+<li><strong>Kernel Limits</strong>: The OS kernel imposes limits on the number of open sockets, which may restrict the number of concurrently active ports.</li>
+<li><strong>Resource Availability</strong>: Memory, CPU, and network bandwidth limit the number of ports a system can efficiently handle.</li>
+<li><strong>Ephemeral Port Range</strong>: Operating systems configure a default range of ephemeral ports, which can be adjusted to accommodate more connections.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="practical-usage-of-ports">Practical Usage of Ports<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#practical-usage-of-ports" class="hash-link" aria-label="Direct link to Practical Usage of Ports" title="Direct link to Practical Usage of Ports">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-web-servers">1. <strong>Web Servers</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#1-web-servers" class="hash-link" aria-label="Direct link to 1-web-servers" title="Direct link to 1-web-servers">​</a></h3>
+<p>Web servers like Apache or Nginx use well-known ports (e.g., 80 and 443) to serve content. For each incoming request, the OS assigns an ephemeral port to the client-side connection, enabling multiple concurrent users to interact with the server.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-high-performance-systems">2. <strong>High-Performance Systems</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#2-high-performance-systems" class="hash-link" aria-label="Direct link to 2-high-performance-systems" title="Direct link to 2-high-performance-systems">​</a></h3>
+<p>Applications like load balancers, proxies, and distributed systems may utilize a large number of ports for backend connections, often relying on multiple IP addresses to scale.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-networking-applications">3. <strong>Networking Applications</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#3-networking-applications" class="hash-link" aria-label="Direct link to 3-networking-applications" title="Direct link to 3-networking-applications">​</a></h3>
+<p>Network appliances such as firewalls or NAT devices dynamically manage ports to facilitate large-scale traffic routing, requiring efficient port allocation and reuse.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="factors-affecting-port-availability">Factors Affecting Port Availability<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#factors-affecting-port-availability" class="hash-link" aria-label="Direct link to Factors Affecting Port Availability" title="Direct link to Factors Affecting Port Availability">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-concurrency-limits">1. <strong>Concurrency Limits</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#1-concurrency-limits" class="hash-link" aria-label="Direct link to 1-concurrency-limits" title="Direct link to 1-concurrency-limits">​</a></h3>
+<p>Even with 65,535 ports available per IP address, the number of simultaneous connections is limited by system resources:</p>
+<ul>
+<li><strong>File Descriptors</strong>: Each socket requires a file descriptor. The maximum number of file descriptors is configurable but limited by system resources.</li>
+<li><strong>Memory Usage</strong>: Each connection consumes memory for buffers, connection states, and kernel structures.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-firewall-rules">2. <strong>Firewall Rules</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#2-firewall-rules" class="hash-link" aria-label="Direct link to 2-firewall-rules" title="Direct link to 2-firewall-rules">​</a></h3>
+<p>Firewalls may block certain port ranges, effectively reducing the usable ports on a system.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-application-logic">3. <strong>Application Logic</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#3-application-logic" class="hash-link" aria-label="Direct link to 3-application-logic" title="Direct link to 3-application-logic">​</a></h3>
+<p>Applications may restrict the range of ports they use to simplify configuration or comply with security policies.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="optimizing-port-usage">Optimizing Port Usage<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#optimizing-port-usage" class="hash-link" aria-label="Direct link to Optimizing Port Usage" title="Direct link to Optimizing Port Usage">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-adjusting-ephemeral-port-ranges">1. <strong>Adjusting Ephemeral Port Ranges</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#1-adjusting-ephemeral-port-ranges" class="hash-link" aria-label="Direct link to 1-adjusting-ephemeral-port-ranges" title="Direct link to 1-adjusting-ephemeral-port-ranges">​</a></h3>
+<p>Modern operating systems allow customization of ephemeral port ranges:</p>
+<ul>
+<li>
+<p><strong>Linux</strong>:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sysctl -w net.ipv4.ip_local_port_range="10000 61000"</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+<li>
+<p><strong>Windows</strong>:</p>
+<div class="language-powershell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-powershell codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">netsh int ipv4 set dynamicport tcp start=10000 num=50000</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-using-multiple-ip-addresses">2. <strong>Using Multiple IP Addresses</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#2-using-multiple-ip-addresses" class="hash-link" aria-label="Direct link to 2-using-multiple-ip-addresses" title="Direct link to 2-using-multiple-ip-addresses">​</a></h3>
+<p>Assigning multiple IP addresses to a machine increases the number of available ports. This is particularly useful in high-performance or multi-tenant environments.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-load-balancing">3. <strong>Load Balancing</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#3-load-balancing" class="hash-link" aria-label="Direct link to 3-load-balancing" title="Direct link to 3-load-balancing">​</a></h3>
+<p>Distributing traffic across multiple machines or containers reduces the load on a single system, preventing port exhaustion.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="nic-hardware-details">NIC Hardware Details<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#nic-hardware-details" class="hash-link" aria-label="Direct link to NIC Hardware Details" title="Direct link to NIC Hardware Details">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-types-of-nics">1. <strong>Types of NICs</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#1-types-of-nics" class="hash-link" aria-label="Direct link to 1-types-of-nics" title="Direct link to 1-types-of-nics">​</a></h3>
+<ul>
+<li><strong>Integrated NICs</strong>: Built into the motherboard; standard networking capabilities for everyday use.</li>
+<li><strong>Dedicated NICs</strong>: Installed as expansion cards (e.g., PCIe NICs) with advanced features.</li>
+<li><strong>Virtual NICs</strong>: Software-defined interfaces used in virtualized environments.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-hardware-differences">2. <strong>Hardware Differences</strong><a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#2-hardware-differences" class="hash-link" aria-label="Direct link to 2-hardware-differences" title="Direct link to 2-hardware-differences">​</a></h3>
+<ul>
+<li><strong>Speed</strong>: Varies from 1 Gbps to 100 Gbps for high-performance cards.</li>
+<li><strong>Port Count</strong>: Some NICs offer multiple ports for simultaneous network connections.</li>
+<li><strong>Advanced Features</strong>: Offloading, TCP checksum, and RDMA to reduce CPU usage.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="deployment-strategies-for-multiple-nic-systems">Deployment Strategies for Multiple NIC Systems<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#deployment-strategies-for-multiple-nic-systems" class="hash-link" aria-label="Direct link to Deployment Strategies for Multiple NIC Systems" title="Direct link to Deployment Strategies for Multiple NIC Systems">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="linux-networking-configuration">Linux Networking Configuration<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#linux-networking-configuration" class="hash-link" aria-label="Direct link to Linux Networking Configuration" title="Direct link to Linux Networking Configuration">​</a></h3>
+<p>Configure multiple NICs using <code>ip</code> commands:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">ip addr add 192.168.1.100/24 dev eth0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ip addr add 192.168.2.100/24 dev eth1</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="nic-bonding">NIC Bonding<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#nic-bonding" class="hash-link" aria-label="Direct link to NIC Bonding" title="Direct link to NIC Bonding">​</a></h3>
+<p>Example bonding configuration for redundancy and load balancing:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">auto bond0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">iface bond0 inet static</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    address 192.168.1.10</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    netmask 255.255.255.0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    bond-mode 802.3ad</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    bond-slaves eth0 eth1</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="cloud-networking-and-nic-concepts">Cloud Networking and NIC Concepts<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#cloud-networking-and-nic-concepts" class="hash-link" aria-label="Direct link to Cloud Networking and NIC Concepts" title="Direct link to Cloud Networking and NIC Concepts">​</a></h2>
+<p>Details about AWS, Azure, and GCP networking features.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="conclusion">Conclusion<a href="https://singletonmatrix.com/blog/2024/12/20/understanding-os-ports/understanding_os_ports#conclusion" class="hash-link" aria-label="Direct link to Conclusion" title="Direct link to Conclusion">​</a></h2>
+<p>A robust understanding of ports and NICs is critical for modern systems. Deploy configurations based on workload needs.</p>]]></content:encoded>
+            <category>Networking</category>
+            <category>NIC</category>
+            <category>Port</category>
+            <category>AWS</category>
+            <category>Azure</category>
+        </item>
+        <item>
+            <title><![CDATA[Welcome]]></title>
+            <link>https://singletonmatrix.com/blog/welcome</link>
+            <guid>https://singletonmatrix.com/blog/welcome</guid>
+            <pubDate>Thu, 26 Aug 2021 00:00:00 GMT</pubDate>
+            <description><![CDATA[Docusaurus blogging features are powered by the blog plugin.]]></description>
+            <content:encoded><![CDATA[<p><a href="https://docusaurus.io/docs/blog" target="_blank" rel="noopener noreferrer">Docusaurus blogging features</a> are powered by the <a href="https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog" target="_blank" rel="noopener noreferrer">blog plugin</a>.</p>
+<p>Here are a few tips you might find useful.</p>
+<p>Simply add Markdown files (or folders) to the <code>blog</code> directory.</p>
+<p>Regular blog authors can be added to <code>authors.yml</code>.</p>
+<p>The blog post date can be extracted from filenames, such as:</p>
+<ul>
+<li><code>2019-05-30-welcome.md</code></li>
+<li><code>2019-05-30-welcome/index.md</code></li>
+</ul>
+<p>A blog post folder can be convenient to co-locate blog post images:</p>
+<p><img decoding="async" loading="lazy" alt="Docusaurus Plushie" src="https://singletonmatrix.com/assets/images/docusaurus-plushie-banner-a60f7593abca1e3eef26a9afa244e4fb.jpeg" width="1500" height="500" class="img_ev3q"></p>
+<p>The blog supports tags as well!</p>
+<p><strong>And if you don't want a blog</strong>: just delete this directory, and use <code>blog: false</code> in your Docusaurus config.</p>]]></content:encoded>
+            <category>Facebook</category>
+            <category>Hello</category>
+            <category>Docusaurus</category>
+        </item>
+        <item>
+            <title><![CDATA[MDX Blog Post]]></title>
+            <link>https://singletonmatrix.com/blog/mdx-blog-post</link>
+            <guid>https://singletonmatrix.com/blog/mdx-blog-post</guid>
+            <pubDate>Sun, 01 Aug 2021 00:00:00 GMT</pubDate>
+            <description><![CDATA[Blog posts support Docusaurus Markdown features, such as MDX.]]></description>
+            <content:encoded><![CDATA[<p>Blog posts support <a href="https://docusaurus.io/docs/markdown-features" target="_blank" rel="noopener noreferrer">Docusaurus Markdown features</a>, such as <a href="https://mdxjs.com/" target="_blank" rel="noopener noreferrer">MDX</a>.</p>
+<div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>tip</div><div class="admonitionContent_BuS1"><p>Use the power of React to create interactive blog posts.</p></div></div>
+<!-- -->
+<p>For example, use JSX to create an interactive button:</p>
+<div class="language-js codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-js codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">button onClick</span><span class="token operator" style="color:#393A34">=</span><span class="token punctuation" style="color:#393A34">{</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token arrow operator" style="color:#393A34">=&gt;</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">alert</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">'button clicked!'</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">}</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token maybe-class-name">Click</span><span class="token plain"> me</span><span class="token operator" style="color:#393A34">!</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token operator" style="color:#393A34">/</span><span class="token plain">button</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<button>Click me!</button>]]></content:encoded>
+            <category>Docusaurus</category>
+        </item>
+        <item>
+            <title><![CDATA[Long Blog Post]]></title>
+            <link>https://singletonmatrix.com/blog/long-blog-post</link>
+            <guid>https://singletonmatrix.com/blog/long-blog-post</guid>
+            <pubDate>Wed, 29 May 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[This is the summary of a very long blog post,]]></description>
+            <content:encoded><![CDATA[<p>This is the summary of a very long blog post,</p>
+<p>Use a <code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code> comment to limit blog post size in the list view.</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>]]></content:encoded>
+            <category>Hello</category>
+            <category>Docusaurus</category>
+        </item>
+        <item>
+            <title><![CDATA[First Blog Post]]></title>
+            <link>https://singletonmatrix.com/blog/first-blog-post</link>
+            <guid>https://singletonmatrix.com/blog/first-blog-post</guid>
+            <pubDate>Tue, 28 May 2019 00:00:00 GMT</pubDate>
+            <description><![CDATA[Lorem ipsum dolor sit amet...]]></description>
+            <content:encoded><![CDATA[<p>Lorem ipsum dolor sit amet...</p>
+<p>...consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>]]></content:encoded>
+            <category>Hola</category>
+            <category>Docusaurus</category>
+        </item>
+    </channel>
+</rss>
