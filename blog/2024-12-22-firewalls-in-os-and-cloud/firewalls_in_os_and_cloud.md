@@ -3,11 +3,11 @@ title: Understanding Firewalls in Operating Systems and Cloud Environments
 authors: [rahulkumar]
 author_email: "rahulumar.aws@gmail.com"
 tags:
-  - "Networking"
-  - "Security"
-  - "Firewall"
-  - "AWS"
-  - "Azure"
+  - "networking"
+  - "security"
+  - "firewall"
+  - "aws"
+  - "azure"
 ---
 
 # Understanding Firewalls in Operating Systems and Cloud Environments
@@ -15,7 +15,7 @@ tags:
 Firewalls are essential components of modern network security, serving as a protective barrier between trusted and untrusted networks. Whether on-premises or in the cloud, firewalls monitor and control traffic to enforce security policies. This blog explores the role of firewalls in operating systems (OS) and cloud environments, highlighting their similarities, differences, and best practices for cloud usage.
 
 ---
-
+<!-- truncate -->
 ## What Is a Firewall?
 
 A **firewall** is a security device or software designed to monitor and control incoming and outgoing network traffic. Firewalls enforce policies based on pre-configured rules to prevent unauthorized access and protect systems from malicious traffic.

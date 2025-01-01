@@ -17,3 +17,38 @@ hola:
   label: Hola
   permalink: /hola
   description: Hola tag description
+
+networking:
+  label: Networking
+  permalink: /networking
+  description: networking tag description
+
+firewall:
+  label: Firewall
+  permalink: /firewall
+  description: networking tag description
+
+security:
+  label: Security
+  permalink: /security
+  description: networking tag description
+
+nic:
+  label: NIC
+  permalink: /nic
+  description: networking tag description
+
+aws:
+  label: AWS
+  permalink: /aws
+  description: networking tag description
+
+azure:
+  label: Azure
+  permalink: /azure
+  description: networking tag description
+
+port:
+  label: Port
+  permalink: /port
+  description: networking tag description

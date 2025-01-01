@@ -3,9 +3,9 @@ title: "Designing Your Own Firewall: Concepts and Implementation"
 authors: [rahulkumar]
 author_email: "rahulumar.aws@gmail.com"
 tags:
-  - "Networking"
-  - "Security"
-  - "Firewall"
+  - "networking"
+  - "security"
+  - "firewall"
 ---
 
 
@@ -14,7 +14,7 @@ tags:
 A firewall is a crucial component in any network security architecture. While off-the-shelf solutions are widely available, there may be scenarios where designing a custom firewall is necessary—whether for specialized applications, unique traffic filtering needs, or educational purposes. This blog provides a comprehensive overview of how to design and implement your own firewall.
 
 ---
-
+<!-- truncate -->
 ## Key Components of a Custom Firewall
 
 1. **Packet Inspection Engine**:

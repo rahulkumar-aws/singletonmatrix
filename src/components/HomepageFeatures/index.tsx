@@ -60,9 +60,14 @@ export default function HomepageFeatures(): JSX.Element {
     <section className={styles.features}>
       <div className="container">
         <div className="row">
-          {FeatureList.map((props, idx) => (
+          {/* {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
-          ))}
+          ))} */}
+          <img
+  src="/img/work-in-progress.png"
+  alt="Work in progress"
+  style={{ display: "block", margin: "0 auto" }}
+/>
         </div>
       </div>
     </section>

@@ -3,11 +3,11 @@ title: Understanding the Number of Ports an Operating System Can Have
 authors: [rahulkumar]
 author_email: "rahulumar.aws@gmail.com"
 tags:
-  - "Networking"
-  - "NIC"
-  - "Port"
-  - "AWS"
-  - "Azure"
+  - "networking"
+  - "nic"
+  - "port"
+  - "aws"
+  - "azure"
 ---
 
 # Understanding the Number of Ports an Operating System Can Have
@@ -15,7 +15,7 @@ tags:
 When discussing ports in the context of operating systems, it's essential to understand how they relate to networking. Ports are integral to the TCP/IP and UDP protocol stacks, enabling multiple communication endpoints to coexist on a single machine. This blog delves into the technicalities of how many ports an OS can support, the factors that influence this number, and practical considerations for their usage.
 
 ---
-
+<!-- truncate -->
 ## What Are Ports?
 
 A **port** is a logical construct that identifies a specific process or service running on a device. When combined with an IP address, a port creates a **socket**, which serves as a unique communication endpoint in a networked environment. Ports are defined by 16-bit numbers, ranging from **0 to 65,535**.
