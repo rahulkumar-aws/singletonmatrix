@@ -1,7 +1,7 @@
 ---
-title: Markdown page example
+title: SingletonMatrix page example
 ---
 
-# Markdown page example
+# SingletonMatrix page example
 
 You don't need React to write simple standalone pages.
