@@ -1,13 +1,13 @@
 ---
 title: Understanding Firewalls in Operating Systems and Cloud Environments
-author: "Rahul Kumar"
+authors: [rahulkumar]
 author_email: "rahulumar.aws@gmail.com"
 tags:
   - "Networking"
   - "Security"
   - "Firewall"
-  - "System Design"
-  - "Custom Implementation"
+  - "AWS"
+  - "Azure"
 ---
 
 # Understanding Firewalls in Operating Systems and Cloud Environments

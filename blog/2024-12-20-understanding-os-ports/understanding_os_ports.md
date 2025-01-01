@@ -1,13 +1,13 @@
 ---
 title: Understanding the Number of Ports an Operating System Can Have
-author: "Rahul Kumar"
+authors: [rahulkumar]
 author_email: "rahulumar.aws@gmail.com"
 tags:
   - "Networking"
-  - "Security"
-  - "Firewall"
-  - "System Design"
-  - "Custom Implementation"
+  - "NIC"
+  - "Port"
+  - "AWS"
+  - "Azure"
 ---
 
 # Understanding the Number of Ports an Operating System Can Have

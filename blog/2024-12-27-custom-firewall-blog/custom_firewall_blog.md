@@ -1,13 +1,11 @@
 ---
 title: "Designing Your Own Firewall: Concepts and Implementation"
-author: "Rahul Kumar"
+authors: [rahulkumar]
 author_email: "rahulumar.aws@gmail.com"
 tags:
   - "Networking"
   - "Security"
   - "Firewall"
-  - "System Design"
-  - "Custom Implementation"
 ---
 
 
