@@ -81,7 +81,7 @@ const config: Config = {
           items: [
             {
               label: 'Tutorial',
-              to: '/docs/intro', // Path to the intro doc
+              to: '/docs/azure/index', // Path to the intro doc
             },
           ],
         },
