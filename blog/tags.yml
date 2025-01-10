@@ -46,9 +46,24 @@ aws:
 azure:
   label: Azure
   permalink: /azure
-  description: networking tag description
+  description: Microsoft Azure Cloud
+
+arm:
+  label: ARM
+  permalink: /arm
+  description: Azure Resource Manager
+
+azure-sdk:
+  label: Azure SDK
+  permalink: /azure-sdk
+  description: Azure Softwate Development Kit
 
 port:
   label: Port
   permalink: /port
   description: networking tag description
+
+terraform:
+  label: Terraform
+  permalink: /terraform
+  description: Terraform a IaaC tool
